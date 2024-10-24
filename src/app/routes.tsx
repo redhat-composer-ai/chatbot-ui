@@ -33,10 +33,6 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Home />,
-      },
-      {
-        path: 'Chats',
         element: <BaseChatbot />,
         loader: chatbotLoader,
         errorElement: <NotFound />,

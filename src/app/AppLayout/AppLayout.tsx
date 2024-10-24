@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLoaderData } from 'react-router-dom';
 import {
   Brand,
   Button,
@@ -8,22 +8,29 @@ import {
   MastheadLogo,
   MastheadMain,
   MastheadToggle,
-  Nav,
-  NavExpandable,
-  NavItem,
-  NavList,
   Page,
-  PageSidebar,
-  PageSidebarBody,
   SkipToContent,
 } from '@patternfly/react-core';
-import { IAppRoute, IAppRouteGroup, routes } from '@app/routes';
 import { BarsIcon } from '@patternfly/react-icons';
 import logo from '@app/bgimages/Logo-Red_Hat-Composer_AI_Studio-A-Standard-RGB.svg';
 import logoDark from '@app/bgimages/Logo-Red_Hat-Composer_AI_Studio-A-Reverse.svg';
+import SidebarWithFlyout from './SidebarWithFlyout';
 
 const AppLayout: React.FunctionComponent = () => {
   const [sidebarOpen, setSidebarOpen] = React.useState(true);
+
+  // set height of flyout to match nav
+  React.useEffect(() => {
+    const sourceElement = document.getElementById('nav-primary-simple');
+    if (sourceElement) {
+      const height = sourceElement.offsetHeight;
+
+      const targetElements = document.getElementsByClassName('flyoutMenu');
+      for (let i = 0; i < targetElements.length; i++) {
+        (targetElements[i] as HTMLElement).style.height = `${height}px`;
+      }
+    }
+  }, []);
 
   const masthead = (
     <Masthead>
@@ -50,48 +57,7 @@ const AppLayout: React.FunctionComponent = () => {
     </Masthead>
   );
 
-  const location = useLocation();
-
-  const renderNavItem = (route: IAppRoute, index: number) => (
-    <NavItem key={`${route.label}-${index}`} id={`${route.label}-${index}`} isActive={route.path === location.pathname}>
-      <NavLink
-        to={route.path}
-        reloadDocument
-        className={({ isActive, isPending, isTransitioning }) =>
-          [isPending ? 'pending' : '', isActive ? 'active' : '', isTransitioning ? 'transitioning' : ''].join(' ')
-        }
-      >
-        {route.label}
-      </NavLink>
-    </NavItem>
-  );
-
-  const renderNavGroup = (group: IAppRouteGroup, groupIndex: number) => (
-    <NavExpandable
-      key={`${group.label}-${groupIndex}`}
-      id={`${group.label}-${groupIndex}`}
-      title={group.label}
-      isActive={group.routes.some((route) => route.path === location.pathname)}
-    >
-      {group.routes.map((route, idx) => route.label && renderNavItem(route, idx))}
-    </NavExpandable>
-  );
-
-  const Navigation = (
-    <Nav id="nav-primary-simple">
-      <NavList id="nav-list-simple">
-        {routes.map(
-          (route, idx) => route.label && (!route.routes ? renderNavItem(route, idx) : renderNavGroup(route, idx)),
-        )}
-      </NavList>
-    </Nav>
-  );
-
-  const Sidebar = (
-    <PageSidebar>
-      <PageSidebarBody>{Navigation}</PageSidebarBody>
-    </PageSidebar>
-  );
+  const Sidebar = <SidebarWithFlyout />;
 
   const pageId = 'primary-app-container';
 

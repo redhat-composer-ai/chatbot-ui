@@ -18,3 +18,57 @@ pf-v6-c-page__main-container.pf-m-fill {
   max-height: 80vh;
   overflow-y: auto;
 }
+
+#page-sidebar {
+  overflow: visible;
+  @media screen and (max-width: 900px) {
+    width: 100%;
+  }
+}
+
+.flyout-header {
+  padding: var(--pf-t--global--spacer--md);
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+}
+
+.flyout-menu {
+  padding: var(--pf-t--global--spacer--md);
+  overflow: hidden;
+  overflow-y: auto;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 250px;
+  background: green;
+  display: flex;
+  flex-direction: column;
+
+  @media screen and (max-width: 900px) {
+    width: 100%;
+    left: 0;
+  }
+}
+
+.start-screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pf-t--global--spacer--sm);
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.pf-v6-c-masthead {
+  @media screen and (min-width: 1200px) {
+    display: none;
+  }
+}
+
+.sidebar-masthead {
+  padding: var(--pf-t--global--spacer--md);
+  @media screen and (max-width: 1199px) {
+    display: none;
+  }
+}
