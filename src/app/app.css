@@ -27,8 +27,7 @@ pf-v6-c-page__main-container.pf-m-fill {
 }
 
 .flyout-header {
-  padding: var(--pf-t--global--spacer--md);
-  font-weight: bold;
+  font-weight: 500;
   display: flex;
   justify-content: space-between;
 }
@@ -40,7 +39,7 @@ pf-v6-c-page__main-container.pf-m-fill {
   position: absolute;
   top: 0;
   left: 100%;
-  width: 250px;
+  width: 25vw;
   background: green;
   display: flex;
   flex-direction: column;
@@ -54,10 +53,27 @@ pf-v6-c-page__main-container.pf-m-fill {
 .start-screen {
   display: flex;
   flex-direction: column;
-  gap: var(--pf-t--global--spacer--sm);
+  gap: var(--pf-t--global--spacer--md);
   justify-content: center;
   align-items: center;
   flex: 1;
+
+  h1 {
+    font-weight: 500;
+    font-size: var(--pf-t--global--font--size--heading--h3);
+  }
+}
+
+.start-screen-text {
+  text-align: center;
+}
+
+.start-screen-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--pf-t--global--spacer--sm);
 }
 
 .pf-v6-c-masthead {

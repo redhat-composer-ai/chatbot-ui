@@ -1,78 +1,15 @@
-// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
-import { Brand, Button, FocusTrap, Nav, NavItem, NavList, PageSidebar } from '@patternfly/react-core';
-import FlyoutStartScreen from '@app/FlyoutStartScreen.tsx/FlyoutStartScreen';
+import { Brand, Nav, NavItem, NavList, PageSidebar } from '@patternfly/react-core';
 import logo from '@app/bgimages/Logo-Red_Hat-Composer_AI_Studio-A-Standard-RGB.svg';
 import logoDark from '@app/bgimages/Logo-Red_Hat-Composer_AI_Studio-A-Reverse.svg';
+import { FlyoutHeader } from '@app/FlyoutHeader.tsx/FlyoutHeader';
+import { FlyoutStartScreen } from '@app/FlyoutStartScreen.tsx/FlyoutStartScreen';
+import { FlyoutMenu } from './FlyoutMenu';
 
-const FlyoutHeader = ({ title, hideFlyout }) => {
-  return (
-    <div className="flyout-header">
-      {title}{' '}
-      <Button onClick={hideFlyout} variant="plain">
-        x
-      </Button>
-    </div>
-  );
-};
-const FlyoutMenu = ({ id, height, children, hideFlyout }) => {
-  const previouslyFocusedElement = React.useRef(null);
-
-  const handleFlyout = (event: KeyboardEvent) => {
-    const key = event.key;
-    if (key === 'Escape') {
-      event.stopPropagation();
-      event.preventDefault();
-      hideFlyout();
-    }
-  };
-
-  const focusTrapProps = {
-    tabIndex: -1,
-    'aria-modal': true,
-    role: 'dialog',
-    active: true,
-    'aria-labelledby': id,
-    focusTrapOptions: {
-      //fallbackFocus: () => panel.current,
-      onActivate: () => {
-        if (previouslyFocusedElement.current !== document.activeElement) {
-          previouslyFocusedElement.current = document.activeElement;
-        }
-      },
-      onDeactivate: () => {
-        previouslyFocusedElement.current &&
-          previouslyFocusedElement.current.focus &&
-          previouslyFocusedElement.current.focus();
-      },
-      clickOutsideDeactivates: true,
-      returnFocusOnDeactivate: false,
-      // FocusTrap's initialFocus can accept false as a value to prevent initial focus.
-      // We want to prevent this in case false is ever passed in.
-      initialFocus: undefined,
-      escapeDeactivates: false,
-    },
-  };
-
-  return (
-    <FocusTrap
-      id={id}
-      className="flyout-menu"
-      style={{
-        height: `${height}px`,
-      }}
-      onKeyDown={handleFlyout}
-      {...focusTrapProps}
-    >
-      {children}
-    </FocusTrap>
-  );
-};
-
-const SidebarWithFlyout = () => {
+export const SidebarWithFlyout: React.FunctionComponent = () => {
   const [visibleFlyout, setVisibleFlyout] = useState(null);
-  const sidebarRef = useRef(null);
-  const flyoutMenuRef = useRef(null);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const flyoutMenuRef = useRef<HTMLDivElement>(null);
   const [sidebarHeight, setSidebarHeight] = useState(0);
 
   useEffect(() => {
@@ -161,12 +98,14 @@ const SidebarWithFlyout = () => {
             hideFlyout={() => setVisibleFlyout(null)}
           >
             <FlyoutHeader title={visibleFlyout} hideFlyout={() => setVisibleFlyout(null)} />
-            <FlyoutStartScreen title="test" subtitle="test" primaryButtonText="test" />
+            <FlyoutStartScreen
+              title="Create your first assistant"
+              subtitle="Work smarter and faster with tailored assistance"
+              primaryButtonText="Create assistant"
+            />
           </FlyoutMenu>
         )}
       </div>
     </PageSidebar>
   );
 };
-
-export default SidebarWithFlyout;

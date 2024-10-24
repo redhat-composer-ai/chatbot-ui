@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Outlet, useLoaderData } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import {
   Brand,
   Button,
@@ -18,6 +18,19 @@ import SidebarWithFlyout from './SidebarWithFlyout';
 
 const AppLayout: React.FunctionComponent = () => {
   const [sidebarOpen, setSidebarOpen] = React.useState(true);
+
+  React.useEffect(() => {
+    const updateSidebar = () => {
+      if (window.innerWidth >= 1200) {
+        setSidebarOpen(true);
+      }
+    };
+    window.addEventListener('resize', updateSidebar);
+
+    return () => {
+      window.removeEventListener('resize', updateSidebar);
+    };
+  }, []);
 
   // set height of flyout to match nav
   React.useEffect(() => {

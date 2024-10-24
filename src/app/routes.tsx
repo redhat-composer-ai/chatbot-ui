@@ -3,7 +3,6 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { NotFound } from '@app/NotFound/NotFound';
 import { BaseChatbot, loader as chatbotLoader } from './BaseChatbot/BaseChatbot';
 import { AppLayout } from './AppLayout/AppLayout';
-import { Home } from './Home/Home';
 
 export interface IAppRoute {
   label?: string; // Excluding the label will exclude the route from the nav sidebar in AppLayout

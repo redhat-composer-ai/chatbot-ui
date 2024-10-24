@@ -9,7 +9,7 @@ interface FlyoutStartScreenProps {
   primaryButtonText?: string;
   secondaryButtonText?: string;
 }
-const FlyoutStartScreen: React.FunctionComponent<FlyoutStartScreenProps> = ({
+export const FlyoutStartScreen: React.FunctionComponent<FlyoutStartScreenProps> = ({
   image,
   imageAlt,
   subtitle,
@@ -20,17 +20,19 @@ const FlyoutStartScreen: React.FunctionComponent<FlyoutStartScreenProps> = ({
   return (
     <div className="start-screen">
       {image && <img src={image} alt={imageAlt} />}
-      <h1>{title}</h1>
-      {subtitle && <p>{subtitle}</p>}
-      {primaryButtonText && <Button>{primaryButtonText}</Button>}
-      {secondaryButtonText && (
-        <>
-          <p>or</p>
-          <Button>{secondaryButtonText}</Button>
-        </>
-      )}
+      <div className="start-screen-text">
+        <h1>{title}</h1>
+        {subtitle && <p>{subtitle}</p>}
+      </div>
+      <div className="start-screen-actions">
+        {primaryButtonText && <Button>{primaryButtonText}</Button>}
+        {secondaryButtonText && (
+          <>
+            <p>or</p>
+            <Button variant="secondary">{secondaryButtonText}</Button>
+          </>
+        )}
+      </div>
     </div>
   );
 };
-
-export default FlyoutStartScreen;
