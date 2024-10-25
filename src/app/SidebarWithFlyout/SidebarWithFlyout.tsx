@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Brand, Nav, NavItem, NavList, PageSidebar } from '@patternfly/react-core';
+import { Brand, Label, Nav, NavItem, NavList, PageSidebar } from '@patternfly/react-core';
 import logo from '@app/bgimages/Logo-Red_Hat-Composer_AI_Studio-A-Standard-RGB.svg';
 import logoDark from '@app/bgimages/Logo-Red_Hat-Composer_AI_Studio-A-Reverse.svg';
 import { FlyoutHeader } from '@app/FlyoutHeader.tsx/FlyoutHeader';
@@ -7,11 +7,13 @@ import { FlyoutStartScreen } from '@app/FlyoutStartScreen.tsx/FlyoutStartScreen'
 import { FlyoutMenu } from './FlyoutMenu';
 import { FlyoutForm } from '@app/FlyoutForm/FlyoutForm';
 import { FlyoutLoading } from '@app/FlyoutLoading/FlyoutLoading';
+import { FlyoutList } from '@app/FlyoutList/FlyoutList';
 
 export const SidebarWithFlyout: React.FunctionComponent = () => {
   const [sidebarHeight, setSidebarHeight] = useState(0);
   const [showStart, setShowStart] = useState(true);
   const [showCreateAssistant, setShowCreateAssistant] = useState(false);
+  const [showList, setShowList] = useState(true);
   const [visibleFlyout, setVisibleFlyout] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const flyoutMenuRef = useRef<HTMLDivElement>(null);
@@ -76,7 +78,22 @@ export const SidebarWithFlyout: React.FunctionComponent = () => {
     }
   }, [visibleFlyout]);
 
+  const renderTitle = (visibleFlyout) => {
+    if (showCreateAssistant) {
+      return 'New assistant';
+    }
+    if (showList) {
+      return (
+        <div className="title-with-label">
+          Assistants <Label variant="outline">2</Label>
+        </div>
+      );
+    }
+    return visibleFlyout;
+  };
+
   const renderContent = (visibleFlyout) => {
+    return <FlyoutList />;
     if (isLoading) {
       return <FlyoutLoading />;
     }
@@ -141,10 +158,7 @@ export const SidebarWithFlyout: React.FunctionComponent = () => {
             height={sidebarHeight}
             hideFlyout={() => setVisibleFlyout(undefined)}
           >
-            <FlyoutHeader
-              title={showCreateAssistant ? 'New assistant' : visibleFlyout}
-              hideFlyout={() => setVisibleFlyout(undefined)}
-            />
+            <FlyoutHeader title={renderTitle(visibleFlyout)} hideFlyout={() => setVisibleFlyout(undefined)} />
             {renderContent(visibleFlyout)}
           </FlyoutMenu>
         )}

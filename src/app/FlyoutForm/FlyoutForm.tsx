@@ -125,7 +125,7 @@ export const FlyoutForm: React.FunctionComponent = () => {
       </FormGroup>
       <ActionGroup className="flyout-form-footer">
         <Button variant="link">Cancel</Button>
-        <Button variant="primary">Create Assistant</Button>
+        <Button variant="primary">Create assistant</Button>
       </ActionGroup>
     </Form>
   );

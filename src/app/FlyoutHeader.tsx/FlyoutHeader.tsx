@@ -3,7 +3,7 @@ import { TimesIcon } from '@patternfly/react-icons';
 import * as React from 'react';
 
 interface FlyoutHeaderProps {
-  title: string;
+  title: React.ReactNode;
   hideFlyout: () => void;
 }
 export const FlyoutHeader: React.FunctionComponent<FlyoutHeaderProps> = ({ title, hideFlyout }: FlyoutHeaderProps) => {

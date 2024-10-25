@@ -116,7 +116,8 @@ pf-v6-c-page__main-container.pf-m-fill {
 }
 
 .flyout-form,
-.flyout-loading {
+.flyout-loading,
+.flyout-list {
   height: 100%;
 }
 
@@ -124,4 +125,34 @@ pf-v6-c-page__main-container.pf-m-fill {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.flyout-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pf-t--global--spacer--md);
+}
+
+.flyout-list-footer {
+  flex: 1;
+  align-self: flex-end;
+  display: flex;
+  width: 100%;
+
+  .pf-v6-c-form__group-control {
+    height: 100%;
+    display: flex;
+  }
+  .pf-v6-c-form__actions {
+    align-self: flex-end;
+    justify-content: flex-end;
+    display: flex;
+    width: 100%;
+  }
+}
+
+.title-with-label {
+  display: flex;
+  gap: var(--pf-t--global--spacer--xs);
+  align-items: baseline;
 }
