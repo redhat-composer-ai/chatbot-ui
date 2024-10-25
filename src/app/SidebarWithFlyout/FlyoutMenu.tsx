@@ -1,5 +1,5 @@
 import { FocusTrap } from '@patternfly/react-core';
-import React from 'react';
+import * as React from 'react';
 
 interface FlyoutMenuProps {
   id: string;

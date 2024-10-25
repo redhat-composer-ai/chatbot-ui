@@ -1,33 +1,27 @@
-import React, { useEffect, useRef, useState } from 'react';
+import * as React from 'react';
 import { Brand, Label, Nav, NavItem, NavList, PageSidebar } from '@patternfly/react-core';
 import logo from '@app/bgimages/Logo-Red_Hat-Composer_AI_Studio-A-Standard-RGB.svg';
 import logoDark from '@app/bgimages/Logo-Red_Hat-Composer_AI_Studio-A-Reverse.svg';
-import { FlyoutHeader } from '@app/FlyoutHeader.tsx/FlyoutHeader';
 import { FlyoutStartScreen } from '@app/FlyoutStartScreen.tsx/FlyoutStartScreen';
 import { FlyoutMenu } from './FlyoutMenu';
 import { FlyoutForm } from '@app/FlyoutForm/FlyoutForm';
 import { FlyoutLoading } from '@app/FlyoutLoading/FlyoutLoading';
 import { FlyoutList } from '@app/FlyoutList/FlyoutList';
+import { FlyoutWizardProvider } from '@app/FlyoutWizard/FlyoutWizardContext';
+import { FlyoutWizard } from '@app/FlyoutWizard/FlyoutWizard';
 
 export const SidebarWithFlyout: React.FunctionComponent = () => {
-  const [sidebarHeight, setSidebarHeight] = useState(0);
-  const [showStart, setShowStart] = useState(true);
-  const [showCreateAssistant, setShowCreateAssistant] = useState(false);
-  const [showList, setShowList] = useState(true);
-  const [visibleFlyout, setVisibleFlyout] = useState<string | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState(false);
-  const flyoutMenuRef = useRef<HTMLDivElement>(null);
-  const sidebarRef = useRef<HTMLDivElement>(null);
+  const [sidebarHeight, setSidebarHeight] = React.useState(0);
+  const [visibleFlyout, setVisibleFlyout] = React.useState<string | undefined>(undefined);
+  const [isLoading] = React.useState(false);
+  const flyoutMenuRef = React.useRef<HTMLDivElement>(null);
+  const sidebarRef = React.useRef<HTMLDivElement>(null);
 
   const FLYOUT_CONTENT = {
     Assistants: {
       title: 'Create your first assistant',
       subtitle: 'Work smarter and faster with tailored assistance',
       primaryButtonText: 'Create assistant',
-      onPrimaryButtonClick: () => {
-        setShowCreateAssistant(true);
-        setShowStart(false);
-      },
     },
     Files: {
       title: 'Upload your first file',
@@ -36,7 +30,7 @@ export const SidebarWithFlyout: React.FunctionComponent = () => {
     },
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     const updateHeight = () => {
       if (sidebarRef.current) {
         setSidebarHeight(sidebarRef.current.offsetHeight);
@@ -70,7 +64,7 @@ export const SidebarWithFlyout: React.FunctionComponent = () => {
   };
 
   // Adjust flyout height to match the sidebar height when flyout is visible
-  useEffect(() => {
+  React.useEffect(() => {
     if (visibleFlyout && sidebarRef.current && flyoutMenuRef.current) {
       const sidebarHeight = sidebarRef.current.offsetHeight;
       flyoutMenuRef.current.style.height = `${sidebarHeight}px`;
@@ -78,39 +72,69 @@ export const SidebarWithFlyout: React.FunctionComponent = () => {
     }
   }, [visibleFlyout]);
 
-  const renderTitle = (visibleFlyout) => {
-    if (showCreateAssistant) {
-      return 'New assistant';
-    }
-    if (showList) {
-      return (
-        <div className="title-with-label">
-          Assistants <Label variant="outline">2</Label>
-        </div>
-      );
-    }
-    return visibleFlyout;
-  };
-
   const renderContent = (visibleFlyout) => {
-    return <FlyoutList />;
     if (isLoading) {
       return <FlyoutLoading />;
     }
-    if (showStart) {
+    if (visibleFlyout === 'Assistants') {
       return (
-        <FlyoutStartScreen
-          title={FLYOUT_CONTENT[visibleFlyout].title}
-          subtitle={FLYOUT_CONTENT[visibleFlyout].subtitle}
-          primaryButtonText={FLYOUT_CONTENT[visibleFlyout].primaryButtonText}
-          onPrimaryButtonClick={FLYOUT_CONTENT[visibleFlyout].onPrimaryButtonClick}
-        />
+        <FlyoutWizardProvider>
+          <FlyoutWizard
+            steps={[
+              <FlyoutStartScreen
+                key="assistant-start"
+                title={FLYOUT_CONTENT[visibleFlyout].title}
+                subtitle={FLYOUT_CONTENT[visibleFlyout].subtitle}
+                primaryButtonText={FLYOUT_CONTENT[visibleFlyout].primaryButtonText}
+                header="Assistants"
+                hideFlyout={() => setVisibleFlyout(undefined)}
+              />,
+              <FlyoutForm key="assistant-form" header="New assistant" hideFlyout={() => setVisibleFlyout(undefined)} />,
+              <FlyoutList
+                key="assistant-list"
+                header={
+                  <div className="title-with-label">
+                    {visibleFlyout} <Label variant="outline">2</Label>
+                  </div>
+                }
+                hideFlyout={() => setVisibleFlyout(undefined)}
+                buttonText="New assistant"
+                typeWordPlural="assistants"
+              />,
+            ]}
+          />
+        </FlyoutWizardProvider>
+      );
+    } else {
+      return (
+        <FlyoutWizardProvider>
+          <FlyoutWizard
+            steps={[
+              <FlyoutStartScreen
+                key="files-start"
+                title={FLYOUT_CONTENT[visibleFlyout].title}
+                subtitle={FLYOUT_CONTENT[visibleFlyout].subtitle}
+                primaryButtonText={FLYOUT_CONTENT[visibleFlyout].primaryButtonText}
+                header="Files"
+                hideFlyout={() => setVisibleFlyout(undefined)}
+              />,
+              <FlyoutList
+                key="files-list"
+                header={
+                  <div className="title-with-label">
+                    {visibleFlyout} <Label variant="outline">2</Label>
+                  </div>
+                }
+                hideFlyout={() => setVisibleFlyout(undefined)}
+                buttonText="Upload file"
+                typeWordPlural="files"
+                onFooterButtonClick={() => null}
+              />,
+            ]}
+          />
+        </FlyoutWizardProvider>
       );
     }
-    if (showCreateAssistant) {
-      return <FlyoutForm />;
-    }
-    return <div>List of assistants</div>;
   };
 
   return (
@@ -143,8 +167,6 @@ export const SidebarWithFlyout: React.FunctionComponent = () => {
               aria-haspopup="menu"
               aria-expanded={visibleFlyout !== null}
               isActive={visibleFlyout === 'Files'}
-              // button would make more sense
-              // probably something easier to look at it.
             >
               Files
             </NavItem>
@@ -158,7 +180,6 @@ export const SidebarWithFlyout: React.FunctionComponent = () => {
             height={sidebarHeight}
             hideFlyout={() => setVisibleFlyout(undefined)}
           >
-            <FlyoutHeader title={renderTitle(visibleFlyout)} hideFlyout={() => setVisibleFlyout(undefined)} />
             {renderContent(visibleFlyout)}
           </FlyoutMenu>
         )}

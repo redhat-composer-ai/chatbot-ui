@@ -30,6 +30,7 @@ pf-v6-c-page__main-container.pf-m-fill {
   font-weight: 500;
   display: flex;
   justify-content: space-between;
+  padding-block-end: var(--pf-t--global--spacer--sm);
 }
 
 .flyout-menu {
@@ -39,7 +40,8 @@ pf-v6-c-page__main-container.pf-m-fill {
   position: absolute;
   top: 0;
   left: 100%;
-  width: 25vw;
+  width: 35vw;
+  max-width: 400px;
   background: green;
   display: flex;
   flex-direction: column;
@@ -47,6 +49,7 @@ pf-v6-c-page__main-container.pf-m-fill {
   @media screen and (max-width: 900px) {
     width: 100%;
     left: 0;
+    max-width: 100%;
   }
 }
 
@@ -89,25 +92,6 @@ pf-v6-c-page__main-container.pf-m-fill {
   }
 }
 
-.flyout-form-footer {
-  align-self: flex-end;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  flex: 1;
-  padding-block-end: var(--pf-t--global--spacer--md);
-  .pf-v6-c-form__group-control {
-    height: 100%;
-    display: flex;
-  }
-  .pf-v6-c-form__actions {
-    align-self: flex-end;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
-}
-
 .flyout-form-fileupload.pf-v6-c-file-upload {
   --pf-v6-c-file-upload--PaddingBlockStart: 0;
   --pf-v6-c-file-upload--PaddingInlineStart: 0;
@@ -115,10 +99,11 @@ pf-v6-c-page__main-container.pf-m-fill {
   --pf-v6-c-file-upload--PaddingBlockEnd: 0;
 }
 
-.flyout-form,
+.flyout-form-container,
 .flyout-loading,
 .flyout-list {
-  height: 100%;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .flyout-loading {
@@ -133,26 +118,29 @@ pf-v6-c-page__main-container.pf-m-fill {
   gap: var(--pf-t--global--spacer--md);
 }
 
-.flyout-list-footer {
-  flex: 1;
-  align-self: flex-end;
-  display: flex;
-  width: 100%;
-
-  .pf-v6-c-form__group-control {
-    height: 100%;
-    display: flex;
-  }
-  .pf-v6-c-form__actions {
-    align-self: flex-end;
-    justify-content: flex-end;
-    display: flex;
-    width: 100%;
-  }
-}
-
 .title-with-label {
   display: flex;
   gap: var(--pf-t--global--spacer--xs);
   align-items: baseline;
+}
+
+.flyout-footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding-top: var(--pf-t--global--spacer--md);
+}
+
+.flyout-footer-action-group {
+  width: 100%;
+
+  .pf-v6-c-form__actions {
+    justify-content: flex-end;
+  }
+}
+
+.flyout-footer-action-group.space-between {
+  .pf-v6-c-form__actions {
+    justify-content: space-between;
+  }
 }
