@@ -7,6 +7,7 @@ interface FlyoutStartScreenProps {
   title: string;
   subtitle?: string;
   primaryButtonText?: string;
+  onPrimaryButtonClick?: () => void;
   secondaryButtonText?: string;
 }
 export const FlyoutStartScreen: React.FunctionComponent<FlyoutStartScreenProps> = ({
@@ -15,6 +16,7 @@ export const FlyoutStartScreen: React.FunctionComponent<FlyoutStartScreenProps> 
   subtitle,
   title,
   primaryButtonText,
+  onPrimaryButtonClick,
   secondaryButtonText,
 }: FlyoutStartScreenProps) => {
   return (
@@ -25,7 +27,16 @@ export const FlyoutStartScreen: React.FunctionComponent<FlyoutStartScreenProps> 
         {subtitle && <p>{subtitle}</p>}
       </div>
       <div className="start-screen-actions">
-        {primaryButtonText && <Button>{primaryButtonText}</Button>}
+        {primaryButtonText && (
+          <Button
+            onClick={(e) => {
+              e.preventDefault();
+              onPrimaryButtonClick && onPrimaryButtonClick();
+            }}
+          >
+            {primaryButtonText}
+          </Button>
+        )}
         {secondaryButtonText && (
           <>
             <p>or</p>

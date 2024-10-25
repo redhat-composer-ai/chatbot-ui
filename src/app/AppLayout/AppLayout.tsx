@@ -14,7 +14,7 @@ import {
 import { BarsIcon } from '@patternfly/react-icons';
 import logo from '@app/bgimages/Logo-Red_Hat-Composer_AI_Studio-A-Standard-RGB.svg';
 import logoDark from '@app/bgimages/Logo-Red_Hat-Composer_AI_Studio-A-Reverse.svg';
-import SidebarWithFlyout from './SidebarWithFlyout';
+import { SidebarWithFlyout } from '@app/SidebarWithFlyout/SidebarWithFlyout';
 
 const AppLayout: React.FunctionComponent = () => {
   const [sidebarOpen, setSidebarOpen] = React.useState(true);

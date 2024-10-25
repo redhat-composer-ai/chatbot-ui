@@ -88,3 +88,40 @@ pf-v6-c-page__main-container.pf-m-fill {
     display: none;
   }
 }
+
+.flyout-form-footer {
+  align-self: flex-end;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  flex: 1;
+  padding-block-end: var(--pf-t--global--spacer--md);
+  .pf-v6-c-form__group-control {
+    height: 100%;
+    display: flex;
+  }
+  .pf-v6-c-form__actions {
+    align-self: flex-end;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+
+.flyout-form-fileupload.pf-v6-c-file-upload {
+  --pf-v6-c-file-upload--PaddingBlockStart: 0;
+  --pf-v6-c-file-upload--PaddingInlineStart: 0;
+  --pf-v6-c-file-upload--PaddingInlineEnd: 0;
+  --pf-v6-c-file-upload--PaddingBlockEnd: 0;
+}
+
+.flyout-form,
+.flyout-loading {
+  height: 100%;
+}
+
+.flyout-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
