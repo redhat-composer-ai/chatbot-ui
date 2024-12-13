@@ -17,6 +17,9 @@ interface FlyoutListProps {
   hideFlyout: () => void;
   onFooterButtonClick?: () => void;
   title: string;
+  error?: ErrorObject;
+  isLoading?: boolean;
+  onRetry?: () => void;
 }
 export const FlyoutList: React.FunctionComponent<FlyoutListProps> = ({
   typeWordPlural,
@@ -24,19 +27,33 @@ export const FlyoutList: React.FunctionComponent<FlyoutListProps> = ({
   hideFlyout,
   onFooterButtonClick,
   title,
+  error: errorProp,
+  isLoading: isLoadingProp = true,
+  onRetry,
 }: FlyoutListProps) => {
-  const [error, setError] = React.useState<ErrorObject>();
-  const [items, setItems] = React.useState<CannedChatbot[]>([]);
-  const [filteredItems, setFilteredItems] = React.useState<CannedChatbot[]>([]);
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [error, setError] = React.useState<ErrorObject | undefined>(errorProp);
+  const [originalChatbots, setOriginalChatbots] = React.useState<CannedChatbot[]>([]);
+  const [filteredChatbots, setFilteredChatbots] = React.useState<CannedChatbot[]>([]);
+  // you'll need states for files and filtered files
+  const [isLoading, setIsLoading] = React.useState(isLoadingProp);
   const { nextStep, reloadList, setReloadList } = useFlyoutWizard();
   const location = useLocation();
   const navigate = useNavigate();
   const { flyoutMenuSelectedChatbot, updateFlyoutMenuSelectedChatbot, chatbots, setChatbots } = useAppData();
 
+  // used for file case only
+  React.useEffect(() => {
+    setIsLoading(isLoadingProp);
+  }, [isLoadingProp]);
+
+  // used for file case only
+  React.useEffect(() => {
+    setError(errorProp);
+  }, [errorProp]);
+
   const header = (
     <div className="title-with-label">
-      {title} <Label variant="outline">{items.length}</Label>
+      {title} <Label variant="outline">{originalChatbots.length}</Label>
     </div>
   );
 
@@ -71,8 +88,8 @@ export const FlyoutList: React.FunctionComponent<FlyoutListProps> = ({
         throw new Error(`${response.status}`);
       }
       const data = await response.json();
-      setItems(data);
-      setFilteredItems(data);
+      setOriginalChatbots(data);
+      setFilteredChatbots(data);
       setIsLoading(false);
       setReloadList(false);
       setChatbots(data);
@@ -89,8 +106,8 @@ export const FlyoutList: React.FunctionComponent<FlyoutListProps> = ({
       return;
     }
     if (chatbots.length > 0) {
-      setItems(chatbots);
-      setFilteredItems(chatbots);
+      setOriginalChatbots(chatbots);
+      setFilteredChatbots(chatbots);
       setIsLoading(false);
       return;
     }
@@ -98,13 +115,18 @@ export const FlyoutList: React.FunctionComponent<FlyoutListProps> = ({
   };
 
   React.useEffect(() => {
-    loadAssistants();
+    if (typeWordPlural === 'assistants') {
+      loadAssistants();
+    }
+    if (typeWordPlural === 'files') {
+      // this is where you'd put your API call for files
+    }
   }, []);
 
   const buildMenu = () => {
     return (
       <MenuList>
-        {filteredItems.map((item) => (
+        {filteredChatbots.map((item) => (
           <MenuItem
             className="pf-chatbot__menu-item"
             itemId={item.name}
@@ -120,8 +142,8 @@ export const FlyoutList: React.FunctionComponent<FlyoutListProps> = ({
   };
 
   const onSelect = (_event: React.MouseEvent<Element, MouseEvent> | undefined, value) => {
-    if (filteredItems.length > 0) {
-      const newChatbot = items.filter((item) => item.name === value)[0];
+    if (filteredChatbots.length > 0) {
+      const newChatbot = originalChatbots.filter((item) => item.name === value)[0];
       updateFlyoutMenuSelectedChatbot(newChatbot);
       if (location.pathname !== '/') {
         navigate('/');
@@ -129,8 +151,8 @@ export const FlyoutList: React.FunctionComponent<FlyoutListProps> = ({
     }
   };
 
-  const findMatchingItems = (targetValue: string) => {
-    const matchingElements = items.filter((item) => {
+  const findMatchingItems = (targetValue: string, originalItems) => {
+    const matchingElements = originalItems.filter((item) => {
       const name = item.displayName ?? item.name;
       return name.toLowerCase().includes(targetValue.toLowerCase());
     });
@@ -138,21 +160,30 @@ export const FlyoutList: React.FunctionComponent<FlyoutListProps> = ({
   };
 
   const handleTextInputChange = (value: string) => {
-    if (value === '') {
-      setFilteredItems(items);
-      return;
+    if (typeWordPlural === 'assistants') {
+      if (value === '') {
+        setFilteredChatbots(originalChatbots);
+        return;
+      }
+      const newItems = findMatchingItems(value, originalChatbots);
+      setFilteredChatbots(newItems);
     }
-    const newItems = findMatchingItems(value);
-    setFilteredItems(newItems);
+    if (typeWordPlural === 'files') {
+      // you'll need to add a matcher here based on state
+    }
   };
 
-  const onClick = () => {
+  const onAssistantClick = () => {
     setError(undefined);
     loadAssistants();
   };
 
   return error ? (
-    <FlyoutError title={error.title} subtitle={error.body} onClick={onClick} />
+    <FlyoutError
+      title={error.title}
+      subtitle={error.body}
+      onClick={typeWordPlural === 'assistants' ? onAssistantClick : onRetry}
+    />
   ) : (
     <>
       <FlyoutHeader title={header} hideFlyout={hideFlyout} />
@@ -166,7 +197,7 @@ export const FlyoutList: React.FunctionComponent<FlyoutListProps> = ({
           />
           <Menu className="flyout-list-menu" isPlain onSelect={onSelect}>
             <MenuContent>
-              {filteredItems.length > 0 ? (
+              {filteredChatbots.length > 0 ? (
                 buildMenu()
               ) : (
                 <MenuList>
