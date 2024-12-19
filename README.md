@@ -1,5 +1,9 @@
 # Composer AI Studio
 
+[![Build Image](https://github.com/redhat-composer-ai/chatbot-ui/actions/workflows/ci.yaml/badge.svg)](https://github.com/redhat-composer-ai/chatbot-ui/actions/workflows/ci.yaml)
+
+[![GitHub](https://img.shields.io/badge/GitHub-repo-blue.svg)](https://github.com/redhat-composer-ai/chatbot-ui) [![Quay.io](https://img.shields.io/badge/Quay.io-image-blue.svg)](https://quay.io/repository/redhat-composer-ai/composer-ai-studio)
+
 Composer AI Studio is based off PatternFly Seed.
 
 Patternfly Seed is an open source build scaffolding utility for web apps. The primary purpose of this project is to give developers a jump start when creating new projects that will use patternfly. A secondary purpose of this project is to serve as a reference for how to configure various aspects of an application that uses patternfly, webpack, react, typescript, etc.
