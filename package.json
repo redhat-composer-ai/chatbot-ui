@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "prebuild": "npm run openapi && node scripts/add-ts-nocheck.js && npm run type-check && npm run clean",
+    "prebuild": "echo $PATH && npm run openapi && node scripts/add-ts-nocheck.js && echo $PATH && npm run type-check && npm run clean",
     "dr:surge": "node dr-surge.js",
     "build": "webpack --config webpack.prod.js && npm run dr:surge",
     "start": "sirv dist --cors --single --host --port 3000",
@@ -18,7 +18,7 @@
     "eslint": "eslint --ext .tsx,.js ./src/",
     "lint": "npm run eslint",
     "format": "prettier --check --write ./src/**/*.{tsx,ts}",
-    "type-check": "npx tsc --noEmit",
+    "type-check": "tsc --noEmit",
     "ci-checks": "npm run type-check && npm run lint && npm run test:coverage",
     "build:bundle-profile": "webpack --config webpack.prod.js --profile --json > stats.json",
     "bundle-profile:analyze": "npm run build:bundle-profile && webpack-bundle-analyzer ./stats.json",
